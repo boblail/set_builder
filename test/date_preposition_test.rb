@@ -19,5 +19,14 @@ class DatePrepositionTest < ActiveSupport::TestCase
     end
   end
 
+  test "should use 'IS NOT NULL' rather than '!= NULL'" do
+    modifier = DatePreposition.new(operator: :ever, values: [])
+    assert_equal "\"people\".\"birthday\" IS NOT NULL",
+      modifier.build_arel_for(table[:birthday]).to_sql
+
+    assert_equal "values.value::date IS NOT NULL",
+      modifier.build_arel_for(Arel.sql("values.value::date")).to_sql
+  end
+
 
 end
